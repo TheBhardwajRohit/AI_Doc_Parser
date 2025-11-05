@@ -1,296 +1,238 @@
-# AI Document Parser
+# AI Document Parser - Split Architecture
 
-A comprehensive AI-powered document processing system that extracts text from academic documents using OCR, categorizes them using Gemini AI, extracts skills, and provides relevant job recommendations.
+> **🎯 Quick Start:** Open [START_HERE.md](START_HERE.md) to begin!
 
-## 🚀 Features
+## Overview
 
-- **Drag & Drop Upload**: Easy-to-use interface for uploading multiple documents
-- **OCR Processing**: Extracts text from PDF, JPG, and PNG files using EasyOCR
-- **AI Categorization**: Automatically categorizes documents using Google Gemini API
-- **Skill Extraction**: Identifies technical and soft skills from certificates
-- **Job Matching**: Provides relevant job recommendations based on extracted skills
-- **Server Dashboard**: Monitor server health and manage processed documents
-- **Multi-user Support**: Organizes documents by username
+AI-powered document parser with OCR, skill extraction, and job matching capabilities.
+
+**Architecture:** Split deployment with frontends on Windows and backend on Linux.
+
+## 🚀 Quick Setup
+
+### Windows PC (Frontends)
+```cmd
+cd windows-client
+SETUP.bat
+REM Create .env.local files with Linux server IP
+START.bat
+```
+
+### Linux Server (Backend)
+```bash
+cd linux-server
+./setup.sh
+sudo ufw allow 8000/tcp
+./start.sh
+```
 
 ## 📁 Project Structure
 
 ```
 AI_Doc_Parser/
-├── backend/                    # FastAPI backend server
-│   ├── main.py                # Main API endpoints
-│   ├── database.py            # SQLite database operations
-│   ├── ocr_service.py         # EasyOCR integration
-│   ├── ai_service.py          # Gemini AI integration
-│   ├── job_matcher.py         # Job recommendation engine
-│   ├── requirements.txt       # Python dependencies
-│   └── .env.example           # Environment variables template
-├── user-frontend/             # Next.js user interface (Port 3000)
-│   ├── app/                   # Next.js app directory
-│   ├── components/            # React components
-│   └── package.json           # Node dependencies
-├── server-frontend/           # Next.js admin dashboard (Port 3001)
-│   ├── app/                   # Next.js app directory
-│   ├── components/            # React components
-│   └── package.json           # Node dependencies
-└── README.md                  # This file
+│
+├── 🪟 windows-client/          # Run on Windows PC
+│   ├── user-frontend/          # User interface (Port 3000)
+│   ├── server-frontend/        # Admin interface (Port 3001)
+│   ├── SETUP.bat              # Setup script
+│   └── START.bat              # Start script
+│
+├── 🐧 linux-server/            # Deploy to Linux
+│   ├── backend/               # FastAPI backend (Port 8000)
+│   ├── setup.sh               # Setup script
+│   └── start.sh               # Start script
+│
+└── 📚 Documentation/
+    ├── START_HERE.md          # 👈 Start here!
+    ├── QUICK_START.md         # 5-minute setup
+    ├── DEPLOYMENT_GUIDE.md    # Detailed guide
+    ├── SETUP_CHECKLIST.md     # Step-by-step checklist
+    └── More...
 ```
 
-## 🛠️ Installation & Setup
+## 📖 Documentation
 
-### Prerequisites
+| Document | Purpose |
+|----------|---------|
+| **[START_HERE.md](START_HERE.md)** | 👈 **Begin here!** |
+| [QUICK_START.md](QUICK_START.md) | Get running in 5 minutes |
+| [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) | Complete setup instructions |
+| [SETUP_CHECKLIST.md](SETUP_CHECKLIST.md) | Step-by-step checklist |
+| [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) | Architecture overview |
+| [MIGRATION_NOTES.md](MIGRATION_NOTES.md) | What changed |
+| [WHAT_YOU_HAVE_NOW.md](WHAT_YOU_HAVE_NOW.md) | Summary of new setup |
 
-- Python 3.8 or higher
-- Node.js 18 or higher
-- npm or yarn
+## 🎨 Architecture
 
-### 1. Backend Setup
-
-```bash
-# Navigate to backend directory
-cd backend
-
-# Create virtual environment (recommended)
-python -m venv venv
-
-# Activate virtual environment
-# On Windows:
-venv\Scripts\activate
-# On Linux/Mac:
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Create .env file from example
-copy .env.example .env
-
-# Edit .env and add your Gemini API key
-# Get your API key from: https://makersuite.google.com/app/apikey
+```
+┌─────────────────────────────────┐
+│      Windows PC (Client)        │
+│                                 │
+│  ┌─────────────────────────┐   │
+│  │  User Frontend :3000    │   │
+│  └─────────────────────────┘   │
+│                                 │
+│  ┌─────────────────────────┐   │
+│  │  Server Frontend :3001  │   │
+│  └─────────────────────────┘   │
+│                                 │
+│         │ HTTP API Calls        │
+└─────────┼───────────────────────┘
+          │
+          ▼
+┌─────────────────────────────────┐
+│    Linux Server (Backend)       │
+│                                 │
+│  ┌─────────────────────────┐   │
+│  │  FastAPI Backend :8000  │   │
+│  │  - OCR Processing       │   │
+│  │  - AI Analysis          │   │
+│  │  - Job Matching         │   │
+│  └─────────────────────────┘   │
+│                                 │
+│  ┌─────────────────────────┐   │
+│  │  SQLite Database        │   │
+│  │  Document Storage       │   │
+│  └─────────────────────────┘   │
+└─────────────────────────────────┘
 ```
 
-**Important**: Edit the `.env` file and add your Gemini API key:
-```
-GEMINI_API_KEY=your_actual_api_key_here
-```
+## ✨ Features
 
-### 2. User Frontend Setup
+- 📄 **Document Upload**: PDF, JPG, PNG support
+- 🔍 **OCR Processing**: Extract text from images and PDFs
+- 🤖 **AI Analysis**: Categorize documents and extract skills
+- 💼 **Job Matching**: Find relevant jobs based on skills
+- 📊 **Admin Dashboard**: Manage and view all documents
+- 🔒 **CORS Enabled**: Secure cross-origin requests
 
-```bash
-# Navigate to user frontend directory
-cd user-frontend
+## 🛠️ Tech Stack
 
-# Install dependencies
-npm install
+### Frontend (Windows)
+- Next.js 14
+- React 18
+- TypeScript
+- Tailwind CSS
+- Axios
 
-# The frontend will connect to backend at http://localhost:8000
-```
+### Backend (Linux)
+- FastAPI
+- Python 3.8+
+- SQLite
+- OCR Service
+- AI/ML Integration
 
-### 3. Server Frontend Setup
+## 🎯 Access Points
 
-```bash
-# Navigate to server frontend directory
-cd server-frontend
+After setup:
 
-# Install dependencies
-npm install
+- **User Frontend**: http://localhost:3000
+- **Server Frontend**: http://localhost:3001
+- **Backend API**: http://YOUR_LINUX_IP:8000
+- **API Docs**: http://YOUR_LINUX_IP:8000/docs
 
-# The frontend will connect to backend at http://localhost:8000
-```
+## 📋 Prerequisites
 
-## 🚀 Running the Application
+### Windows PC
+- Node.js 18+
+- npm
 
-You need to run all three services simultaneously. Open **three separate terminal windows**:
+### Linux Server
+- Python 3.8+
+- pip
+- Port 8000 accessible
 
-### Terminal 1: Backend Server
+## 🚦 Getting Started
 
-```bash
-cd backend
-# Activate virtual environment if not already active
-python main.py
-```
+**New to this project?** Follow these steps:
 
-The backend will start on `http://localhost:8000`
+1. Read [START_HERE.md](START_HERE.md)
+2. Follow [QUICK_START.md](QUICK_START.md)
+3. Use [SETUP_CHECKLIST.md](SETUP_CHECKLIST.md) to verify
+4. Reference [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for details
 
-### Terminal 2: User Frontend
+## 🆘 Troubleshooting
 
-```bash
-cd user-frontend
-npm run dev
-```
+### Can't connect to backend?
+- Verify backend is running on Linux
+- Check firewall allows port 8000
+- Confirm correct IP in `.env.local` files
 
-The user interface will start on `http://localhost:3000`
+### Frontend won't start?
+- Run `SETUP.bat` first
+- Check Node.js version (need 18+)
+- Delete `node_modules` and reinstall
 
-### Terminal 3: Server Frontend
+### CORS errors?
+- Verify `.env.local` files exist
+- Check Linux server IP is correct
+- Restart frontends after config changes
 
-```bash
-cd server-frontend
-npm run dev
-```
+See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for more troubleshooting.
 
-The admin dashboard will start on `http://localhost:3001`
+## 📝 Configuration
 
-## 🌐 Accessing from Other PCs on Same WiFi
+### Windows Client
 
-### Find Your Server IP Address
-
-**On Windows:**
-```bash
-ipconfig
-```
-Look for "IPv4 Address" under your active network adapter (e.g., `192.168.1.100`)
-
-**On Linux/Mac:**
-```bash
-ifconfig
-# or
-ip addr show
-```
-
-### Access the Applications
-
-Once you have your server's IP address (e.g., `192.168.1.100`):
-
-- **User Frontend**: `http://192.168.1.100:3000`
-- **Server Dashboard**: `http://192.168.1.100:3001`
-- **Backend API**: `http://192.168.1.100:8000`
-
-### Important Notes
-
-1. **Firewall**: Ensure Windows Firewall or your system firewall allows incoming connections on ports 3000, 3001, and 8000
-2. **Same Network**: All devices must be connected to the same WiFi network
-3. **Backend URL**: You may need to update the API URL in the frontend `.env` files:
-
-Create `user-frontend/.env.local`:
-```
-NEXT_PUBLIC_API_URL=http://192.168.1.100:8000
-```
-
-Create `server-frontend/.env.local`:
-```
-NEXT_PUBLIC_API_URL=http://192.168.1.100:8000
-```
-
-## 📖 Usage Guide
-
-### User Frontend (Port 3000)
-
-1. **Enter Username**: Type your username in the input field
-2. **Upload Documents**: Drag and drop or click to select academic documents (PDF, JPG, PNG)
-3. **Process**: Click "Upload" to process the documents
-4. **View Results**: See extracted information, skills, and job recommendations
-
-### Server Dashboard (Port 3001)
-
-1. **Server Health**: View real-time server status and service health
-2. **Statistics**: Monitor total documents, users, and recent activity
-3. **Document List**: Browse all processed documents with timestamps
-4. **View Details**: Click "View" to see full document analysis
-5. **Delete**: Remove documents and their data from the server
-
-## 🔧 Configuration
-
-### Backend Configuration (`.env`)
+Create `.env.local` in both frontend folders:
 
 ```env
-GEMINI_API_KEY=your_gemini_api_key_here
-HOST=0.0.0.0
-PORT=8000
-DATABASE_PATH=documents.db
-MAX_UPLOAD_SIZE=10485760  # 10MB
-ALLOWED_EXTENSIONS=pdf,jpg,jpeg,png
+NEXT_PUBLIC_API_URL=http://192.168.1.100:8000
 ```
 
-### Document Categories
+Replace `192.168.1.100` with your Linux server IP.
 
-The AI can classify documents into:
-- Internship Certificate
-- Skill Certificate
-- Course Completion Certificate
-- Academic Transcript
-- Degree Certificate
-- Participation Certificate
-- Achievement Certificate
-- Workshop Certificate
-- Training Certificate
-- Project Certificate
+### Linux Server
 
-## 🎯 API Endpoints
+No configuration needed! Backend is pre-configured.
 
-- `GET /` - API root
-- `GET /health` - Server health check
-- `POST /upload` - Upload and process documents
-- `GET /documents` - List all documents
-- `GET /documents/{id}` - Get document details
-- `DELETE /documents/{id}` - Delete document
-- `GET /stats` - Get server statistics
+## 🔐 Security Notes
 
-## 🐛 Troubleshooting
+- CORS is set to `allow_origins=["*"]` for development
+- For production, restrict to specific origins
+- Consider adding authentication
+- Use HTTPS in production
 
-### Backend Issues
+## 📦 What's Included
 
-**EasyOCR Installation Error:**
-```bash
-# Install PyTorch first
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-# Then install EasyOCR
-pip install easyocr
-```
+### Windows Client
+- User-facing document upload interface
+- Admin dashboard for document management
+- Real-time processing status
+- Job recommendations display
 
-**Gemini API Error:**
-- Verify your API key is correct in `.env`
-- Check your internet connection
-- Ensure you have API quota available
+### Linux Server
+- RESTful API with FastAPI
+- OCR text extraction
+- AI-powered document analysis
+- Skill extraction and categorization
+- Job matching algorithm
+- SQLite database
+- File storage management
 
-### Frontend Issues
+## 🎉 Benefits of Split Architecture
 
-**Port Already in Use:**
-```bash
-# Change port in package.json
-"dev": "next dev -p 3002"  # Use different port
-```
+- ✅ **Easy Development**: Edit code on Windows with your IDE
+- ✅ **Better Performance**: No network latency for frontend
+- ✅ **Easier Debugging**: Browser dev tools work normally
+- ✅ **Better Security**: Only backend port needs exposure
+- ✅ **Clean Separation**: True frontend/backend independence
 
-**Cannot Connect to Backend:**
-- Ensure backend is running on port 8000
-- Check firewall settings
-- Verify API URL in environment variables
+## 📞 Support
 
-## 📦 Dependencies
+1. Check [START_HERE.md](START_HERE.md)
+2. Review [QUICK_START.md](QUICK_START.md)
+3. Follow [SETUP_CHECKLIST.md](SETUP_CHECKLIST.md)
+4. Read [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
 
-### Backend
-- FastAPI - Web framework
-- EasyOCR - OCR engine
-- Google Generative AI - Gemini API
-- PyMuPDF - PDF processing
-- OpenCV - Image processing
-- SQLite - Database
+## 📄 License
 
-### Frontend
-- Next.js 14 - React framework
-- TailwindCSS - Styling
-- Axios - HTTP client
-- Lucide React - Icons
-- React Dropzone - File upload
+[Your License Here]
 
-## 🔒 Security Notes
+## 👥 Contributors
 
-- Never commit `.env` files with real API keys
-- Use environment variables for sensitive data
-- Implement authentication for production use
-- Validate and sanitize all file uploads
-- Set appropriate CORS policies for production
-
-## 📝 License
-
-This project is for educational purposes.
-
-## 🤝 Contributing
-
-Feel free to fork, modify, and use this project for your needs.
-
-## 📧 Support
-
-For issues or questions, please check the troubleshooting section or create an issue in the repository.
+[Your Name/Team]
 
 ---
 
-**Built with ❤️ using FastAPI, Next.js, EasyOCR, and Gemini AI**
+**Ready to start?** Open [START_HERE.md](START_HERE.md) now!
