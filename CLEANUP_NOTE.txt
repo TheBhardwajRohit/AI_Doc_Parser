@@ -1,0 +1,45 @@
+CLEANUP INSTRUCTIONS
+====================
+
+The following OLD folders can be safely deleted as they are duplicates:
+
+1. backend/           -> Now in: linux-server/backend/
+2. user-frontend/     -> Now in: windows-client/user-frontend/
+3. server-frontend/   -> Now in: windows-client/server-frontend/
+
+To delete these folders:
+
+Windows (Command Prompt):
+-------------------------
+rmdir /s /q backend
+rmdir /s /q user-frontend
+rmdir /s /q server-frontend
+
+Windows (PowerShell):
+--------------------
+Remove-Item -Recurse -Force backend
+Remove-Item -Recurse -Force user-frontend
+Remove-Item -Recurse -Force server-frontend
+
+Linux/Mac:
+----------
+rm -rf backend user-frontend server-frontend
+
+IMPORTANT: Only delete these after confirming the new structure works!
+
+Current Project Structure:
+--------------------------
+AI_Doc_Parser/
+├── windows-client/          # ✅ KEEP - Frontend applications
+├── linux-server/            # ✅ KEEP - Backend services
+├── Media/                   # ✅ KEEP - Project media files
+├── .git/                    # ✅ KEEP - Git repository
+├── .vscode/                 # ✅ KEEP - VS Code settings
+├── PPT_CODE_SNIPPETS.md     # ✅ KEEP - Presentation snippets
+├── README.md                # ✅ KEEP - Main documentation
+└── .gitignore               # ✅ KEEP - Git ignore rules
+
+Old folders to delete:
+├── backend/                 # ❌ DELETE - Duplicate
+├── user-frontend/           # ❌ DELETE - Duplicate
+└── server-frontend/         # ❌ DELETE - Duplicate
